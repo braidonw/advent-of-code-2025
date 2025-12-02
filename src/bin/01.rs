@@ -29,13 +29,6 @@ impl Rotation {
     }
 }
 
-fn rotate(start: i32, rotation: &Rotation) -> i32 {
-    match rotation.direction {
-        Direction::Left => start - rotation.turns,
-        Direction::Right => start + rotation.turns,
-    }
-}
-
 pub fn part_one(input: &str) -> Option<u64> {
     let rotations = input.lines().map(Rotation::parse).collect::<Vec<_>>();
     let mut current = 50;
@@ -60,12 +53,14 @@ pub fn part_two(input: &str) -> Option<u64> {
     let mut count = 0;
 
     for rotation in rotations {
-        current = match rotation.direction {
-            Direction::Left => current - rotation.turns,
-            Direction::Right => (current + rotation.turns) / 100,
-        };
-        if current % 100 == 0 {
-            count += 1;
+        for _ in 0..rotation.turns {
+            current = match rotation.direction {
+                Direction::Left => current - 1,
+                Direction::Right => current + 1,
+            };
+            if current % 100 == 0 {
+                count += 1;
+            }
         }
     }
 
